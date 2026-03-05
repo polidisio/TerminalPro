@@ -14,7 +14,6 @@
 		4DDB41E33E42F1C3AC53A92E /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6671B046F0CAF374806E225A /* SessionManager.swift */; };
 		53273D28BB829969DA8CD640 /* ConnectionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC87B3C5F5EB667E339331EA /* ConnectionsListView.swift */; };
 		5D2DD2607F5BA9AB0C905F34 /* TerminalProApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DE2A71668B8A50C20CB6A5 /* TerminalProApp.swift */; };
-		72A772AA8A3AA4B53425222F /* Shout in Frameworks */ = {isa = PBXBuildFile; productRef = 1A780586B0DF837001500121 /* Shout */; };
 		86483A56EBE5CD221FB1DD99 /* SSHService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C08F25A2EEEC8C16946F4F /* SSHService.swift */; };
 		886F1AB542524C3F4D184B1F /* ConnectionHistoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F334F0FA04134854DA8A0827 /* ConnectionHistoryStorage.swift */; };
 		9F303126B378E831739EAD4B /* SFTPBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2781443D5165C5C0236B16D /* SFTPBrowserView.swift */; };
@@ -41,17 +40,6 @@
 		E60E7AE535EE3192CFF56D9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F334F0FA04134854DA8A0827 /* ConnectionHistoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHistoryStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		11EEF33D26881817386E4175 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				72A772AA8A3AA4B53425222F /* Shout in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		57A6D1CD90F4453ECE1EA14C /* Views */ = {
@@ -139,7 +127,6 @@
 			buildConfigurationList = B6EC12CACD7FFD1561993565 /* Build configuration list for PBXNativeTarget "TerminalPro" */;
 			buildPhases = (
 				675FCB00931E33CD7D6F0A5E /* Sources */,
-				11EEF33D26881817386E4175 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -147,7 +134,6 @@
 			);
 			name = TerminalPro;
 			packageProductDependencies = (
-				1A780586B0DF837001500121 /* Shout */,
 			);
 			productName = TerminalPro;
 			productReference = 2DF36D2BD3D836E68998D463 /* TerminalPro.app */;
@@ -178,9 +164,6 @@
 			);
 			mainGroup = EA9B005FE4E92D2C5AB20B3C;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				8CFF1F36E08F239AE29E396F /* XCRemoteSwiftPackageReference "Shout" */,
-			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
@@ -398,25 +381,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		8CFF1F36E08F239AE29E396F /* XCRemoteSwiftPackageReference "Shout" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jakeheis/Shout";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.5;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		1A780586B0DF837001500121 /* Shout */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8CFF1F36E08F239AE29E396F /* XCRemoteSwiftPackageReference "Shout" */;
-			productName = Shout;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 43600791AB3A2BC888B7A473 /* Project object */;
 }

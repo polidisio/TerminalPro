@@ -3,7 +3,7 @@ import SwiftUI
 struct SFTPBrowserView: View {
     let server: Server
     
-    @State private var currentPath: String = "/home/\(server.username)"
+    @State private var currentPath: String = "/"
     @State private var files: [SFTPFile] = []
     @State private var selectedFile: SFTPFile?
     @State private var isLoading = false

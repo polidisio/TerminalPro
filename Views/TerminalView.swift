@@ -26,7 +26,7 @@ struct TerminalView: View {
                             .padding()
                             .id("bottom")
                     }
-                    .onChange(of: output) { _, _ in
+                    .onChange(of: output) { newValue in
                         withAnimation {
                             proxy.scrollTo("bottom", anchor: .bottom)
                         }
