@@ -10,6 +10,7 @@ struct SettingsView: View {
     @AppStorage("connectionTimeout") private var connectionTimeout: Int = 30
     @AppStorage("defaultShell") private var defaultShell = "/bin/bash"
     @AppStorage("colorScheme") private var colorScheme = "cyber"
+    @AppStorage("copyPasteMode") private var copyPasteMode = "Standard"
     
     @State private var showingAbout = false
     
@@ -98,6 +99,30 @@ struct SettingsView: View {
                 .listRowBackground(cyberBackground)
                 .tint(cyberAccent)
                 .foregroundStyle(.white)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Copy/Paste Mode")
+                    .foregroundStyle(.white)
+                
+                Picker("Copy/Paste Mode", selection: $copyPasteMode) {
+                    Text("Standard").tag("Standard")
+                    Text("PuTTY Style").tag("PuTTY Style")
+                }
+                .pickerStyle(.segmented)
+                
+                if copyPasteMode == "PuTTY Style" {
+                    Text("Select text to copy. Right-click or long-press to paste.")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
+                        .padding(.top, 4)
+                } else {
+                    Text("Use toolbar buttons or standard copy/paste menus.")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
+                        .padding(.top, 4)
+                }
+            }
+            .listRowBackground(cyberBackground)
         } header: {
             Text("Terminal")
                 .foregroundStyle(cyberSecondary)
