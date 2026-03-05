@@ -16,6 +16,7 @@
 		5D2DD2607F5BA9AB0C905F34 /* TerminalProApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DE2A71668B8A50C20CB6A5 /* TerminalProApp.swift */; };
 		86483A56EBE5CD221FB1DD99 /* SSHService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C08F25A2EEEC8C16946F4F /* SSHService.swift */; };
 		886F1AB542524C3F4D184B1F /* ConnectionHistoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F334F0FA04134854DA8A0827 /* ConnectionHistoryStorage.swift */; };
+		90EEFB1225F20A9AA370F82E /* Pods_TerminalPro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15E172EC463E69F369FE24E8 /* Pods_TerminalPro.framework */; };
 		9F303126B378E831739EAD4B /* SFTPBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2781443D5165C5C0236B16D /* SFTPBrowserView.swift */; };
 		B1D6A2B088046DE36935BE30 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB255860DBEC07EE5C09628 /* TerminalView.swift */; };
 		D9432785547A9BB4546146E3 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC037ADC1D01D04F220BA4 /* ConnectionHistory.swift */; };
@@ -26,9 +27,11 @@
 /* Begin PBXFileReference section */
 		0296F82ECC80EDBE8BA73661 /* SFTPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFTPService.swift; sourceTree = "<group>"; };
 		07DE2A71668B8A50C20CB6A5 /* TerminalProApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalProApp.swift; sourceTree = "<group>"; };
+		15E172EC463E69F369FE24E8 /* Pods_TerminalPro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TerminalPro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		283572AD381A86F34B5C8796 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		2B1F98F5B87A7941B0298E2F /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		2DF36D2BD3D836E68998D463 /* TerminalPro.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TerminalPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DF420E478E95F885D78387C /* Pods-TerminalPro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TerminalPro.debug.xcconfig"; path = "Target Support Files/Pods-TerminalPro/Pods-TerminalPro.debug.xcconfig"; sourceTree = "<group>"; };
 		495029A6BA2B29179D779C02 /* AddServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddServerView.swift; sourceTree = "<group>"; };
 		6671B046F0CAF374806E225A /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		81CC037ADC1D01D04F220BA4 /* ConnectionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHistory.swift; sourceTree = "<group>"; };
@@ -37,11 +40,33 @@
 		B2781443D5165C5C0236B16D /* SFTPBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFTPBrowserView.swift; sourceTree = "<group>"; };
 		B3C08F25A2EEEC8C16946F4F /* SSHService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHService.swift; sourceTree = "<group>"; };
 		BEB255860DBEC07EE5C09628 /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
+		DB955D3B15D454DF2C3421E8 /* Pods-TerminalPro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TerminalPro.release.xcconfig"; path = "Target Support Files/Pods-TerminalPro/Pods-TerminalPro.release.xcconfig"; sourceTree = "<group>"; };
 		E60E7AE535EE3192CFF56D9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F334F0FA04134854DA8A0827 /* ConnectionHistoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHistoryStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		5EA3F11DFD01D9F495612421 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90EEFB1225F20A9AA370F82E /* Pods_TerminalPro.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
+		331780FD779B1A6DB11E9CD3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2DF420E478E95F885D78387C /* Pods-TerminalPro.debug.xcconfig */,
+				DB955D3B15D454DF2C3421E8 /* Pods-TerminalPro.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		57A6D1CD90F4453ECE1EA14C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -52,6 +77,14 @@
 				BEB255860DBEC07EE5C09628 /* TerminalView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		5ECB4CCCCC1B032AB1CBCD15 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				15E172EC463E69F369FE24E8 /* Pods_TerminalPro.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		63E7D6B58B81632801BD27A7 /* Products */ = {
@@ -116,6 +149,8 @@
 				943BA2C2C696843EBFA2F15C /* Services */,
 				57A6D1CD90F4453ECE1EA14C /* Views */,
 				63E7D6B58B81632801BD27A7 /* Products */,
+				331780FD779B1A6DB11E9CD3 /* Pods */,
+				5ECB4CCCCC1B032AB1CBCD15 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,15 +161,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B6EC12CACD7FFD1561993565 /* Build configuration list for PBXNativeTarget "TerminalPro" */;
 			buildPhases = (
+				2EEED3EA4187188382EEBEE0 /* [CP] Check Pods Manifest.lock */,
 				675FCB00931E33CD7D6F0A5E /* Sources */,
+				5EA3F11DFD01D9F495612421 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = TerminalPro;
-			packageProductDependencies = (
-			);
 			productName = TerminalPro;
 			productReference = 2DF36D2BD3D836E68998D463 /* TerminalPro.app */;
 			productType = "com.apple.product-type.application";
@@ -165,6 +200,7 @@
 			mainGroup = EA9B005FE4E92D2C5AB20B3C;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 63E7D6B58B81632801BD27A7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -172,6 +208,31 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2EEED3EA4187188382EEBEE0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TerminalPro-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		675FCB00931E33CD7D6F0A5E /* Sources */ = {
@@ -257,6 +318,7 @@
 		};
 		0967F917448A88474ED881C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DF420E478E95F885D78387C /* Pods-TerminalPro.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -277,6 +339,7 @@
 		};
 		89385F7A65E8F6D51D9EEF18 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB955D3B15D454DF2C3421E8 /* Pods-TerminalPro.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
