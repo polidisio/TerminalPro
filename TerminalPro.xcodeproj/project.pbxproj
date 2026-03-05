@@ -20,6 +20,7 @@
 		9F303126B378E831739EAD4B /* SFTPBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2781443D5165C5C0236B16D /* SFTPBrowserView.swift */; };
 		A9E54741C14BB4E6892C823F /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF804564F7A4794735387EC /* SessionDetailView.swift */; };
 		B1D6A2B088046DE36935BE30 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB255860DBEC07EE5C09628 /* TerminalView.swift */; };
+		D438321DBBD4DA4979E70B23 /* FileDetailsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E7ED0D3127A389D42039E8 /* FileDetailsSheet.swift */; };
 		D9432785547A9BB4546146E3 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC037ADC1D01D04F220BA4 /* ConnectionHistory.swift */; };
 		EC928A826097954ED341FF99 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49872CDC229BAA7FA18054F0 /* SearchBar.swift */; };
 		ED0F752CF747E6BE607E6E86 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F98F5B87A7941B0298E2F /* KeyboardView.swift */; };
@@ -43,6 +44,7 @@
 		B3C08F25A2EEEC8C16946F4F /* SSHService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHService.swift; sourceTree = "<group>"; };
 		BEB255860DBEC07EE5C09628 /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
 		C55676DA7C17C9463E8DC05C /* TerminalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalViewModel.swift; sourceTree = "<group>"; };
+		D2E7ED0D3127A389D42039E8 /* FileDetailsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDetailsSheet.swift; sourceTree = "<group>"; };
 		E60E7AE535EE3192CFF56D9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F334F0FA04134854DA8A0827 /* ConnectionHistoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHistoryStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -53,6 +55,7 @@
 			children = (
 				495029A6BA2B29179D779C02 /* AddServerView.swift */,
 				AC87B3C5F5EB667E339331EA /* ConnectionsListView.swift */,
+				D2E7ED0D3127A389D42039E8 /* FileDetailsSheet.swift */,
 				6CF804564F7A4794735387EC /* SessionDetailView.swift */,
 				E60E7AE535EE3192CFF56D9B /* SettingsView.swift */,
 				B2781443D5165C5C0236B16D /* SFTPBrowserView.swift */,
@@ -199,6 +202,7 @@
 				D9432785547A9BB4546146E3 /* ConnectionHistory.swift in Sources */,
 				886F1AB542524C3F4D184B1F /* ConnectionHistoryStorage.swift in Sources */,
 				53273D28BB829969DA8CD640 /* ConnectionsListView.swift in Sources */,
+				D438321DBBD4DA4979E70B23 /* FileDetailsSheet.swift in Sources */,
 				ED0F752CF747E6BE607E6E86 /* KeyboardView.swift in Sources */,
 				2E940D1CFFB4EA5431A22098 /* KeychainService.swift in Sources */,
 				9F303126B378E831739EAD4B /* SFTPBrowserView.swift in Sources */,

@@ -2,9 +2,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("fontSize") private var fontSize: Double = 14
+    @AppStorage("fontSizePreset") private var fontSizePreset: String = "Medium"
     @AppStorage("showLineNumbers") private var showLineNumbers = true
     @AppStorage("enableBell") private var enableBell = true
     @AppStorage("keepAliveInterval") private var keepAliveInterval = 60
+    @AppStorage("keepAliveEnabled") private var keepAliveEnabled = true
+    @AppStorage("connectionTimeout") private var connectionTimeout: Int = 30
     @AppStorage("defaultShell") private var defaultShell = "/bin/bash"
     @AppStorage("colorScheme") private var colorScheme = "cyber"
     
@@ -14,6 +17,18 @@ struct SettingsView: View {
     private let cyberAccent = Color(red: 0.0, green: 0.9, blue: 0.7)
     private let terminalGreen = Color(red: 0.0, green: 0.9, blue: 0.4)
     private let cyberSecondary = Color(red: 0.0, green: 0.6, blue: 0.5)
+    
+    private let fontSizeOptions = ["Small", "Medium", "Large", "Extra Large"]
+    
+    private func fontSizeValue(for preset: String) -> Double {
+        switch preset {
+        case "Small": return 12
+        case "Medium": return 14
+        case "Large": return 18
+        case "Extra Large": return 24
+        default: return 14
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -41,16 +56,27 @@ struct SettingsView: View {
     private var terminalSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text("Font Size")
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Text("\(Int(fontSize))pt")
-                        .foregroundStyle(cyberAccent)
-                        .font(.system(size: 14, design: .monospaced))
+                Text("Font Size")
+                    .foregroundStyle(.white)
+                
+                Picker("Font Size", selection: $fontSizePreset) {
+                    ForEach(fontSizeOptions, id: \.self) { option in
+                        Text(option).tag(option)
+                    }
                 }
-                Slider(value: $fontSize, in: 10...24, step: 1)
-                    .tint(cyberAccent)
+                .pickerStyle(.segmented)
+                .onChange(of: fontSizePreset) { newValue in
+                    fontSize = fontSizeValue(for: newValue)
+                }
+                
+                HStack {
+                    Text("Preview:")
+                        .foregroundStyle(.gray)
+                    Text("The quick brown fox")
+                        .font(.system(size: fontSize, design: .monospaced))
+                        .foregroundStyle(terminalGreen)
+                }
+                .padding(.top, 4)
             }
             .listRowBackground(cyberBackground)
             
@@ -80,11 +106,28 @@ struct SettingsView: View {
     
     private var connectionSection: some View {
         Section {
-            Picker("Keep-Alive Interval", selection: $keepAliveInterval) {
+            Toggle("Enable Keep-Alive Ping", isOn: $keepAliveEnabled)
+                .listRowBackground(cyberBackground)
+                .tint(cyberAccent)
+                .foregroundStyle(.white)
+            
+            if keepAliveEnabled {
+                Picker("Keep-Alive Interval", selection: $keepAliveInterval) {
+                    Text("30 seconds").tag(30)
+                    Text("60 seconds").tag(60)
+                    Text("120 seconds").tag(120)
+                    Text("300 seconds").tag(300)
+                }
+                .listRowBackground(cyberBackground)
+                .foregroundStyle(.white)
+            }
+            
+            Picker("Connection Timeout", selection: $connectionTimeout) {
+                Text("15 seconds").tag(15)
                 Text("30 seconds").tag(30)
                 Text("60 seconds").tag(60)
+                Text("90 seconds").tag(90)
                 Text("120 seconds").tag(120)
-                Text("Never").tag(0)
             }
             .listRowBackground(cyberBackground)
             .foregroundStyle(.white)

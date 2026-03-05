@@ -7,6 +7,7 @@ struct SFTPBrowserView: View {
     @State private var files: [SFTPFile] = []
     @State private var selectedFile: SFTPFile?
     @State private var isLoading = false
+    @State private var showingFileDetails = false
     
     private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
     private let cyberAccent = Color(red: 0.0, green: 0.9, blue: 0.7)
@@ -51,6 +52,11 @@ struct SFTPBrowserView: View {
         .onAppear {
             loadFiles()
         }
+        .sheet(isPresented: $showingFileDetails) {
+            if let file = selectedFile {
+                FileDetailsSheet(file: file, cyberAccent: cyberAccent, terminalGreen: terminalGreen, cyberBackground: cyberBackground)
+            }
+        }
     }
     
     private var pathBar: some View {
@@ -91,6 +97,30 @@ struct SFTPBrowserView: View {
                         selectedFile = file
                         if file.isDirectory {
                             navigateToDirectory(file.name)
+                        } else {
+                            showingFileDetails = true
+                        }
+                    }
+                    .contextMenu {
+                        Button {
+                            selectedFile = file
+                            showingFileDetails = true
+                        } label: {
+                            Label("View Details", systemImage: "info.circle")
+                        }
+                        
+                        if !file.isDirectory {
+                            Button {
+                                // Download action
+                            } label: {
+                                Label("Download", systemImage: "arrow.down.circle")
+                            }
+                            
+                            Button {
+                                // Copy path action
+                            } label: {
+                                Label("Copy Path", systemImage: "doc.on.doc")
+                            }
                         }
                     }
             }
