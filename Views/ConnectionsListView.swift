@@ -71,7 +71,7 @@ struct ConnectionsListView: View {
         List {
             ForEach(servers) { server in
                 NavigationLink {
-                    TerminalView(server: server)
+                    SessionDetailView(server: server)
                 } label: {
                     ServerRow(server: server, accent: cyberAccent)
                 }
