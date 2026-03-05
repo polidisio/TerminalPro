@@ -150,8 +150,10 @@ struct TerminalView: View {
                 pasteFromClipboard()
             } label: {
                 Image(systemName: "doc.on.clipboard")
+                    .font(.title2)
                     .foregroundStyle(cyberAccent)
             }
+            .padding(.trailing, 4)
             
             Button {
                 sendCommand()
