@@ -4,6 +4,7 @@ struct SessionDetailView: View {
     let server: Server
     
     @StateObject private var sessionManager = SessionManager.shared
+    @StateObject private var terminalViewModel = TerminalViewModel()
     @State private var selectedTab = 0
     @State private var sshService: SSHService?
     @State private var connectionStatus: ConnectionStatus = .disconnected
@@ -55,7 +56,7 @@ struct SessionDetailView: View {
                 connectionStatusBar
                 
                 TabView(selection: $selectedTab) {
-                    TerminalTabView(server: server, sshService: sshService, connectionStatus: connectionStatus)
+                    TerminalTabView(server: server, sshService: sshService, connectionStatus: connectionStatus, viewModel: terminalViewModel)
                         .tag(0)
                     
                     SFTPBrowserView(server: server)
@@ -70,13 +71,31 @@ struct SessionDetailView: View {
             ToolbarItem(placement: .topBarLeading) {
                 connectionIndicator
             }
+            ToolbarItem(placement: .principal) {
+                if terminalViewModel.isSearching {
+                    SearchBar(viewModel: terminalViewModel)
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
-                if connectionStatus == .connected {
-                    Button {
-                        disconnect()
-                    } label: {
-                        Text("Disconnect")
-                            .foregroundStyle(.red)
+                HStack(spacing: 12) {
+                    if connectionStatus == .connected && selectedTab == 0 {
+                        Button {
+                            terminalViewModel.isSearching.toggle()
+                            if !terminalViewModel.isSearching {
+                                terminalViewModel.clearSearch()
+                            }
+                        } label: {
+                            Image(systemName: terminalViewModel.isSearching ? "magnifyingglass.circle.fill" : "magnifyingglass")
+                                .foregroundStyle(cyberAccent)
+                        }
+                    }
+                    if connectionStatus == .connected {
+                        Button {
+                            disconnect()
+                        } label: {
+                            Text("Disconnect")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
             }
@@ -165,9 +184,8 @@ struct TerminalTabView: View {
     let server: Server
     let sshService: SSHService?
     let connectionStatus: SessionDetailView.ConnectionStatus
+    @ObservedObject var viewModel: TerminalViewModel
     
-    @State private var output: String = ""
-    @State private var input: String = ""
     @FocusState private var isInputFocused: Bool
     
     private let cyberBackground = Color(red: 0.02, green: 0.04, blue: 0.08)
@@ -198,7 +216,7 @@ struct TerminalTabView: View {
     private var terminalOutput: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                Text(output.isEmpty ? "Initializing terminal..." : output)
+                Text(viewModel.displayOutput.isEmpty ? "Initializing terminal..." : viewModel.displayOutput)
                     .font(.system(size: 13, design: .monospaced))
                     .foregroundStyle(terminalGreen)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -207,7 +225,7 @@ struct TerminalTabView: View {
                     .id("bottom")
             }
             .background(cyberBackground)
-            .onChange(of: output) { _ in
+            .onChange(of: viewModel.scrollbackBuffer.count) { _ in
                 withAnimation(.easeOut(duration: 0.1)) {
                     proxy.scrollTo("bottom", anchor: .bottom)
                 }
@@ -222,7 +240,7 @@ struct TerminalTabView: View {
                 .foregroundStyle(cyberAccent)
                 .shadow(color: cyberAccent.opacity(0.5), radius: 2)
             
-            TextField("Enter command", text: $input)
+            TextField("Enter command", text: $viewModel.currentInput)
                 .font(.system(size: 14, design: .monospaced))
                 .foregroundStyle(.white)
                 .focused($isInputFocused)
@@ -232,6 +250,9 @@ struct TerminalTabView: View {
                 .onSubmit {
                     sendCommand()
                 }
+                .onChange(of: viewModel.currentInput) { newValue in
+                    viewModel.resetHistoryNavigation()
+                }
             
             Button {
                 sendCommand()
@@ -240,7 +261,7 @@ struct TerminalTabView: View {
                     .font(.title2)
                     .foregroundStyle(cyberAccent)
             }
-            .disabled(input.isEmpty || connectionStatus != .connected)
+            .disabled(viewModel.currentInput.isEmpty || connectionStatus != .connected)
         }
         .padding()
         .background(
@@ -255,20 +276,22 @@ struct TerminalTabView: View {
     }
     
     private func initializeTerminal() {
+        let initialOutput: String
         if let service = sshService {
-            output = service.getOutput()
+            initialOutput = service.getOutput()
         } else {
-            output = """
+            initialOutput = """
             \(server.username)@\(server.host)'s password:
             Last login: \(formattedDate())
             Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-91-generic x86_64)
              * Documentation:  https://help.ubuntu.com
              * Management:     https://landscape.canonical.com
              * Support:        https://ubuntu.com/advantage
-             
+            
             \(server.username)@\(server.host):~$ 
             """
         }
+        viewModel.appendOutput(initialOutput)
     }
     
     private func handleKeyPress(_ key: String) {
@@ -276,49 +299,55 @@ struct TerminalTabView: View {
         case "Ctrl":
             break
         case "Tab":
-            input += "\t"
+            viewModel.currentInput += "\t"
         case "Esc":
-            input += "\u{1B}"
+            viewModel.currentInput += "\u{1B}"
         case "↑":
-            input += "\u{1B}[A"
+            viewModel.currentInput = viewModel.historyPrevious()
         case "↓":
-            input += "\u{1B}[B"
+            viewModel.currentInput = viewModel.historyNext()
         case "→":
-            input += "\u{1B}[C"
+            viewModel.currentInput += "\u{1B}[C"
         case "←":
-            input += "\u{1B}[D"
+            viewModel.currentInput += "\u{1B}[D"
         case "Enter":
             sendCommand()
         case "⌫":
-            if !input.isEmpty {
-                input.removeLast()
+            if !viewModel.currentInput.isEmpty {
+                viewModel.currentInput.removeLast()
             }
         default:
-            input += key
+            viewModel.currentInput += key
         }
     }
     
     private func sendCommand() {
-        guard !input.isEmpty else { return }
+        guard !viewModel.currentInput.isEmpty else { return }
+        
+        let command = viewModel.currentInput
+        viewModel.addToHistory(command)
         
         let prompt = "\(server.username)@\(server.host):~$ "
-        output += input + "\n"
+        viewModel.appendLine(command)
         
         Task {
             var response = ""
             if let service = sshService {
                 do {
-                    response = try await service.execute(command: input)
+                    response = try await service.execute(command: command)
                 } catch {
                     response = "Error: \(error.localizedDescription)"
                 }
             } else {
-                response = simulateResponse(input)
+                response = simulateResponse(command)
             }
             
             await MainActor.run {
-                output += response + "\n" + prompt
-                input = ""
+                if !response.isEmpty {
+                    viewModel.appendOutput(response + "\n")
+                }
+                viewModel.appendLine(prompt)
+                viewModel.currentInput = ""
             }
         }
     }
@@ -333,7 +362,7 @@ struct TerminalTabView: View {
         case "hostname": return server.host
         case "date": return formattedDate()
         case "uname -a": return "Linux \(server.host) 5.15.0-91-generic #101-Ubuntu SMP x86_64 GNU/Linux"
-        case "clear": output = ""; return ""
+        case "clear": viewModel.clearBuffer(); return ""
         case "help": return "Available commands: ls, pwd, whoami, hostname, date, uname, clear, exit"
         case "exit": return "logout\nConnection closed."
         default: return "\(cmd): command not found"
