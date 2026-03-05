@@ -3,11 +3,16 @@ import SwiftUI
 @main
 struct TerminalProApp: App {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @StateObject private var appState = AppState()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
                 .preferredColorScheme(.dark)
+                .onOpenURL { url in
+                    handleURL(url)
+                }
         }
         .commands {
             CommandGroup(replacing: .newItem) {
@@ -39,6 +44,37 @@ struct TerminalProApp: App {
             }
         }
     }
+    
+    private func handleURL(_ url: URL) {
+        guard url.scheme == "terminalpro" else { return }
+        
+        if url.host == "connect" {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            let queryItems = components?.queryItems ?? []
+            
+            let params = queryItems.reduce(into: [String: String]()) { result, item in
+                if let value = item.value {
+                    result[item.name] = value
+                }
+            }
+            
+            if let host = params["host"], !host.isEmpty {
+                let server = Server(
+                    name: params["name"] ?? host,
+                    host: host,
+                    port: Int(params["port"] ?? "22") ?? 22,
+                    username: params["user"] ?? params["username"] ?? "",
+                    authType: .password
+                )
+                
+                appState.quickConnectServer = server
+            }
+        }
+    }
+}
+
+class AppState: ObservableObject {
+    @Published var quickConnectServer: Server?
 }
 
 extension Notification.Name {
@@ -51,6 +87,7 @@ extension Notification.Name {
 struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @EnvironmentObject private var appState: AppState
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var selectedServer: Server?
     @State private var showingAddServer = false

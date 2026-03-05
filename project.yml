@@ -9,6 +9,8 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
     GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_CFBundleURLTypes_TerminalPro: '<array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>com.terminal.pro</string><key>CFBundleURLSchemes</key><array><string>terminalpro</string></array></dict></array>'
+    INFOPLIST_KEY_LSApplicationQueriesSchemes: '<array><string>terminalpro</string></array>'
 
 targets:
   TerminalPro:
