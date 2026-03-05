@@ -10,6 +10,11 @@ settings:
     SWIFT_VERSION: "5.9"
     GENERATE_INFOPLIST_FILE: YES
 
+packages:
+  Shout:
+    url: https://github.com/jakeheis/Shout
+    from: "0.5.5"
+
 targets:
   TerminalPro:
     type: application
@@ -21,6 +26,8 @@ targets:
       - path: Services
       - path: Components
       - path: Resources
+    dependencies:
+      - package: Shout
     settings:
       base:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
