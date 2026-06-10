@@ -1,0 +1,30 @@
+{
+  "name": "TerminalProSSH",
+  "version": "1.0.0",
+  "summary": "SSH/SFTP library for iOS based on libssh2",
+  "description": "A Swift wrapper for libssh2 providing SSH connectivity and SFTP file operations.\nSupports password and key-based authentication, interactive terminal, and full SFTP.",
+  "homepage": "https://github.com/terminalpro/ssh",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "TerminalPro": "dev@terminalpro.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Sources/**/*.{h,m,swift}",
+  "public_header_files": "Sources/**/*.h",
+  "platforms": {
+    "ios": "16.0"
+  },
+  "swift_versions": "5.0",
+  "libraries": "ssh2",
+  "dependencies": {
+    "libssh2": [
+      "~> 1.4"
+    ]
+  },
+  "swift_version": "5.0"
+}

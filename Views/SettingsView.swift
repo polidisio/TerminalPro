@@ -11,16 +11,11 @@ struct SettingsView: View {
     @AppStorage("defaultShell") private var defaultShell = "/bin/bash"
     @AppStorage("colorScheme") private var colorScheme = "cyber"
     @AppStorage("copyPasteMode") private var copyPasteMode = "Standard"
-    
+
     @State private var showingAbout = false
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    private let cyberAccent = Color(red: 0.0, green: 0.9, blue: 0.7)
-    private let terminalGreen = Color(red: 0.0, green: 0.9, blue: 0.4)
-    private let cyberSecondary = Color(red: 0.0, green: 0.6, blue: 0.5)
-    
+
     private let fontSizeOptions = ["Small", "Medium", "Large", "Extra Large"]
-    
+
     private func fontSizeValue(for preset: String) -> Double {
         switch preset {
         case "Small": return 12
@@ -30,12 +25,12 @@ struct SettingsView: View {
         default: return 14
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
-                cyberBackground.ignoresSafeArea()
-                
+                Theme.cyberBackground.ignoresSafeArea()
+
                 List {
                     terminalSection
                     connectionSection
@@ -49,67 +44,67 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .preferredColorScheme(.dark)
             .sheet(isPresented: $showingAbout) {
-                AboutView(cyberAccent: cyberAccent, terminalGreen: terminalGreen)
+                AboutView()
             }
         }
     }
-    
+
     private var terminalSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Font Size")
                     .foregroundStyle(.white)
-                
+
                 Picker("Font Size", selection: $fontSizePreset) {
                     ForEach(fontSizeOptions, id: \.self) { option in
                         Text(option).tag(option)
                     }
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: fontSizePreset) { newValue in
+                .onChange(of: fontSizePreset) { _, newValue in
                     fontSize = fontSizeValue(for: newValue)
                 }
-                
+
                 HStack {
                     Text("Preview:")
                         .foregroundStyle(.gray)
                     Text("The quick brown fox")
                         .font(.system(size: fontSize, design: .monospaced))
-                        .foregroundStyle(terminalGreen)
+                        .foregroundStyle(Theme.terminalGreen)
                 }
                 .padding(.top, 4)
             }
-            .listRowBackground(cyberBackground)
-            
+            .listRowBackground(Theme.cyberBackground)
+
             Picker("Default Shell", selection: $defaultShell) {
                 Text("/bin/bash").tag("/bin/bash")
                 Text("/bin/zsh").tag("/bin/zsh")
                 Text("/bin/sh").tag("/bin/sh")
                 Text("/usr/bin/fish").tag("/usr/bin/fish")
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
             .foregroundStyle(.white)
-            
+
             Toggle("Show Line Numbers", isOn: $showLineNumbers)
-                .listRowBackground(cyberBackground)
-                .tint(cyberAccent)
+                .listRowBackground(Theme.cyberBackground)
+                .tint(Theme.cyberAccent)
                 .foregroundStyle(.white)
-            
+
             Toggle("Enable Bell", isOn: $enableBell)
-                .listRowBackground(cyberBackground)
-                .tint(cyberAccent)
+                .listRowBackground(Theme.cyberBackground)
+                .tint(Theme.cyberAccent)
                 .foregroundStyle(.white)
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text("Copy/Paste Mode")
                     .foregroundStyle(.white)
-                
+
                 Picker("Copy/Paste Mode", selection: $copyPasteMode) {
                     Text("Standard").tag("Standard")
                     Text("PuTTY Style").tag("PuTTY Style")
                 }
                 .pickerStyle(.segmented)
-                
+
                 if copyPasteMode == "PuTTY Style" {
                     Text("Select text to copy. Right-click or long-press to paste.")
                         .font(.caption)
@@ -122,20 +117,20 @@ struct SettingsView: View {
                         .padding(.top, 4)
                 }
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
         } header: {
             Text("Terminal")
-                .foregroundStyle(cyberSecondary)
+                .foregroundStyle(Color(red: 0.0, green: 0.6, blue: 0.5))
         }
     }
-    
+
     private var connectionSection: some View {
         Section {
             Toggle("Enable Keep-Alive Ping", isOn: $keepAliveEnabled)
-                .listRowBackground(cyberBackground)
-                .tint(cyberAccent)
+                .listRowBackground(Theme.cyberBackground)
+                .tint(Theme.cyberAccent)
                 .foregroundStyle(.white)
-            
+
             if keepAliveEnabled {
                 Picker("Keep-Alive Interval", selection: $keepAliveInterval) {
                     Text("30 seconds").tag(30)
@@ -143,10 +138,10 @@ struct SettingsView: View {
                     Text("120 seconds").tag(120)
                     Text("300 seconds").tag(300)
                 }
-                .listRowBackground(cyberBackground)
+                .listRowBackground(Theme.cyberBackground)
                 .foregroundStyle(.white)
             }
-            
+
             Picker("Connection Timeout", selection: $connectionTimeout) {
                 Text("15 seconds").tag(15)
                 Text("30 seconds").tag(30)
@@ -154,11 +149,11 @@ struct SettingsView: View {
                 Text("90 seconds").tag(90)
                 Text("120 seconds").tag(120)
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
             .foregroundStyle(.white)
-            
+
             NavigationLink {
-                SSHKeyManagementView(cyberAccent: cyberAccent)
+                SSHKeyManagementView()
             } label: {
                 HStack {
                     Text("SSH Keys")
@@ -169,13 +164,13 @@ struct SettingsView: View {
                         .foregroundStyle(.gray)
                 }
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
         } header: {
             Text("Connection")
-                .foregroundStyle(cyberSecondary)
+                .foregroundStyle(Color(red: 0.0, green: 0.6, blue: 0.5))
         }
     }
-    
+
     private var appearanceSection: some View {
         Section {
             Picker("Color Scheme", selection: $colorScheme) {
@@ -184,11 +179,11 @@ struct SettingsView: View {
                 Text("Neon (Pink/Purple)").tag("neon")
                 Text("Monochrome").tag("mono")
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
             .foregroundStyle(.white)
-            
+
             NavigationLink {
-                KeyboardSettingsView(cyberAccent: cyberAccent)
+                KeyboardSettingsView()
             } label: {
                 HStack {
                     Text("Keyboard")
@@ -199,13 +194,13 @@ struct SettingsView: View {
                         .foregroundStyle(.gray)
                 }
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
         } header: {
             Text("Appearance")
-                .foregroundStyle(cyberSecondary)
+                .foregroundStyle(Color(red: 0.0, green: 0.6, blue: 0.5))
         }
     }
-    
+
     private var aboutSection: some View {
         Section {
             Button {
@@ -219,8 +214,8 @@ struct SettingsView: View {
                         .foregroundStyle(.gray)
                 }
             }
-            .listRowBackground(cyberBackground)
-            
+            .listRowBackground(Theme.cyberBackground)
+
             HStack {
                 Text("Version")
                     .foregroundStyle(.white)
@@ -228,35 +223,32 @@ struct SettingsView: View {
                 Text("1.0.0")
                     .foregroundStyle(.gray)
             }
-            .listRowBackground(cyberBackground)
+            .listRowBackground(Theme.cyberBackground)
         } header: {
             Text("Info")
-                .foregroundStyle(cyberSecondary)
+                .foregroundStyle(Color(red: 0.0, green: 0.6, blue: 0.5))
         }
     }
 }
 
 struct SSHKeyManagementView: View {
-    let cyberAccent: Color
     @State private var keys: [SSHKey] = []
     @Environment(\.dismiss) private var dismiss
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    
+
     var body: some View {
         ZStack {
-            cyberBackground.ignoresSafeArea()
-            
+            Theme.cyberBackground.ignoresSafeArea()
+
             if keys.isEmpty {
                 VStack(spacing: 20) {
                     Image(systemName: "key.fill")
                         .font(.system(size: 50))
-                        .foregroundStyle(cyberAccent)
-                    
+                        .foregroundStyle(Theme.cyberAccent)
+
                     Text("No SSH Keys")
                         .font(.title2)
                         .foregroundStyle(.white)
-                    
+
                     Text("Generate an SSH key to connect to servers without entering a password.")
                         .font(.subheadline)
                         .foregroundStyle(.gray)
@@ -266,8 +258,8 @@ struct SSHKeyManagementView: View {
             } else {
                 List {
                     ForEach(keys) { key in
-                        SSHKeyRow(key: key, accent: cyberAccent)
-                            .listRowBackground(cyberBackground)
+                        SSHKeyRow(key: key)
+                            .listRowBackground(Theme.cyberBackground)
                     }
                     .onDelete(perform: deleteKey)
                 }
@@ -282,26 +274,26 @@ struct SSHKeyManagementView: View {
                 Button("Generate") {
                     generateKey()
                 }
-                .foregroundStyle(cyberAccent)
+                .foregroundStyle(Theme.cyberAccent)
             }
         }
         .onAppear {
             loadKeys()
         }
     }
-    
+
     private func loadKeys() {
         keys = [
             SSHKey(name: "id_rsa", type: "RSA", created: "2024-01-15", fingerprint: "SHA256:abc123..."),
             SSHKey(name: "id_ed25519", type: "ED25519", created: "2024-01-20", fingerprint: "SHA256:def456...")
         ]
     }
-    
+
     private func generateKey() {
         let newKey = SSHKey(name: "new_key", type: "ED25519", created: "2024-01-25", fingerprint: "SHA256:new123...")
         keys.append(newKey)
     }
-    
+
     private func deleteKey(at offsets: IndexSet) {
         keys.remove(atOffsets: offsets)
     }
@@ -309,29 +301,28 @@ struct SSHKeyManagementView: View {
 
 struct SSHKeyRow: View {
     let key: SSHKey
-    let accent: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "key.fill")
-                    .foregroundStyle(accent)
-                
+                    .foregroundStyle(Theme.cyberAccent)
+
                 Text(key.name)
                     .font(.headline)
                     .foregroundStyle(.white)
             }
-            
+
             HStack(spacing: 16) {
                 Text(key.type)
                     .font(.caption)
                     .foregroundStyle(.gray)
-                
+
                 Text(key.created)
                     .font(.caption)
                     .foregroundStyle(.gray)
             }
-            
+
             Text(key.fingerprint)
                 .font(.system(size: 10, design: .monospaced))
                 .foregroundStyle(.gray)
@@ -349,31 +340,28 @@ struct SSHKey: Identifiable {
 }
 
 struct KeyboardSettingsView: View {
-    let cyberAccent: Color
     @State private var hapticFeedback = true
     @State private var keyClickSound = false
     @State private var showSuggestions = true
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    
+
     var body: some View {
         ZStack {
-            cyberBackground.ignoresSafeArea()
-            
+            Theme.cyberBackground.ignoresSafeArea()
+
             List {
                 Toggle("Haptic Feedback", isOn: $hapticFeedback)
-                    .listRowBackground(cyberBackground)
-                    .tint(cyberAccent)
+                    .listRowBackground(Theme.cyberBackground)
+                    .tint(Theme.cyberAccent)
                     .foregroundStyle(.white)
-                
+
                 Toggle("Key Click Sound", isOn: $keyClickSound)
-                    .listRowBackground(cyberBackground)
-                    .tint(cyberAccent)
+                    .listRowBackground(Theme.cyberBackground)
+                    .tint(Theme.cyberAccent)
                     .foregroundStyle(.white)
-                
+
                 Toggle("Show Word Suggestions", isOn: $showSuggestions)
-                    .listRowBackground(cyberBackground)
-                    .tint(cyberAccent)
+                    .listRowBackground(Theme.cyberBackground)
+                    .tint(Theme.cyberAccent)
                     .foregroundStyle(.white)
             }
             .listStyle(.plain)
@@ -385,32 +373,28 @@ struct KeyboardSettingsView: View {
 }
 
 struct AboutView: View {
-    let cyberAccent: Color
-    let terminalGreen: Color
     @Environment(\.dismiss) private var dismiss
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    
+
     var body: some View {
         ZStack {
-            cyberBackground.ignoresSafeArea()
-            
+            Theme.cyberBackground.ignoresSafeArea()
+
             VStack(spacing: 30) {
                 Spacer()
-                
+
                 Image(systemName: "terminal.fill")
                     .font(.system(size: 80))
-                    .foregroundStyle(cyberAccent)
-                
+                    .foregroundStyle(Theme.cyberAccent)
+
                 Text("TerminalPro")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundStyle(.white)
-                
+
                 Text("Version 1.0.0")
                     .font(.subheadline)
                     .foregroundStyle(.gray)
-                
+
                 VStack(spacing: 10) {
                     Text("A modern SSH/SFTP client with")
                     Text("cyberpunk-inspired interface")
@@ -418,27 +402,27 @@ struct AboutView: View {
                 .font(.body)
                 .foregroundStyle(.gray)
                 .multilineTextAlignment(.center)
-                
+
                 Divider()
-                    .background(cyberAccent)
+                    .background(Theme.cyberAccent)
                     .padding(.horizontal, 60)
-                
+
                 VStack(spacing: 8) {
                     Text("Built with SwiftUI")
                         .font(.caption)
-                        .foregroundStyle(cyberAccent)
-                    
+                        .foregroundStyle(Theme.cyberAccent)
+
                     Text("Powered by Shout SSH")
                         .font(.caption)
-                        .foregroundStyle(terminalGreen)
+                        .foregroundStyle(Theme.terminalGreen)
                 }
-                
+
                 Spacer()
-                
+
                 Button("Close") {
                     dismiss()
                 }
-                .foregroundStyle(cyberAccent)
+                .foregroundStyle(Theme.cyberAccent)
                 .padding(.bottom, 40)
             }
         }

@@ -2,26 +2,23 @@ import SwiftUI
 
 struct FileDetailsSheet: View {
     let file: SFTPFile
-    let cyberAccent: Color
-    let terminalGreen: Color
-    let cyberBackground: Color
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
-                cyberBackground.ignoresSafeArea()
-                
+                Theme.cyberBackground.ignoresSafeArea()
+
                 List {
                     Section("File Information") {
                         DetailRow(label: "Name", value: file.name)
                         DetailRow(label: "Type", value: file.isDirectory ? "Directory" : "File")
-                        DetailRow(label: "Size", value: formatSize(Int64(file.size)))
+                        DetailRow(label: "Size", value: file.formattedSize)
                         DetailRow(label: "Permissions", value: file.permissions)
-                        DetailRow(label: "Modified", value: file.modified)
+                        DetailRow(label: "Modified", value: file.formattedModified)
                     }
-                    .listRowBackground(cyberBackground)
+                    .listRowBackground(Theme.cyberBackground)
                 }
                 .scrollContentBackground(.hidden)
             }
@@ -32,23 +29,10 @@ struct FileDetailsSheet: View {
                     Button("Done") {
                         dismiss()
                     }
-                    .foregroundStyle(cyberAccent)
+                    .foregroundStyle(Theme.cyberAccent)
                 }
             }
         }
-    }
-    
-    private func formatSize(_ size: Int64) -> String {
-        let formatter = ByteCountFormatter()
-        formatter.countStyle = .file
-        return formatter.string(fromByteCount: size)
-    }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
     }
 }
 

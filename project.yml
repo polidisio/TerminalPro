@@ -2,8 +2,13 @@ name: TerminalPro
 options:
   bundleIdPrefix: com.terminal
   deploymentTarget:
-    iOS: "16.0"
+    iOS: "17.0"
   xcodeVersion: "15.0"
+
+packages:
+  Citadel:
+    url: https://github.com/orlandos-nl/Citadel
+    from: "0.12.0"
 
 settings:
   base:
@@ -23,7 +28,9 @@ targets:
       - path: Services
       - path: Components
       - path: ViewModels
-      - path: Resources
+      - path: Shared
+    dependencies:
+      - package: Citadel
     settings:
       base:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES

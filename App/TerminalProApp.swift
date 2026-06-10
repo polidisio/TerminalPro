@@ -4,7 +4,7 @@ import SwiftUI
 struct TerminalProApp: App {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject private var appState = AppState()
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -21,21 +21,21 @@ struct TerminalProApp: App {
                 }
                 .keyboardShortcut("n", modifiers: .command)
             }
-            
+
             CommandGroup(after: .sidebar) {
                 Button("Toggle Sidebar") {
                     NotificationCenter.default.post(name: .toggleSidebar, object: nil)
                 }
-                .keyboardShortcut("s", modifiers: [.command, .control])
-                
+                .keyboardShortcut("b", modifiers: .command)
+
                 Divider()
-                
+
                 Button("Settings") {
                     NotificationCenter.default.post(name: .showSettings, object: nil)
                 }
                 .keyboardShortcut(",", modifiers: .command)
             }
-            
+
             CommandGroup(replacing: .help) {
                 Button("TerminalPro Help") {
                     NotificationCenter.default.post(name: .showHelp, object: nil)
@@ -44,20 +44,20 @@ struct TerminalProApp: App {
             }
         }
     }
-    
+
     private func handleURL(_ url: URL) {
         guard url.scheme == "terminalpro" else { return }
-        
+
         if url.host == "connect" {
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             let queryItems = components?.queryItems ?? []
-            
+
             let params = queryItems.reduce(into: [String: String]()) { result, item in
                 if let value = item.value {
                     result[item.name] = value
                 }
             }
-            
+
             if let host = params["host"], !host.isEmpty {
                 let server = Server(
                     name: params["name"] ?? host,
@@ -66,7 +66,7 @@ struct TerminalProApp: App {
                     username: params["user"] ?? params["username"] ?? "",
                     authType: .password
                 )
-                
+
                 appState.quickConnectServer = server
             }
         }
@@ -92,9 +92,7 @@ struct ContentView: View {
     @State private var selectedServer: Server?
     @State private var showingAddServer = false
     @State private var showingSettings = false
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    
+
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             SidebarView(
@@ -142,21 +140,19 @@ struct SidebarView: View {
     @Binding var selectedServer: Server?
     @Binding var showingAddServer: Bool
     @Binding var showingSettings: Bool
-    @State private var servers: [Server] = []
+    @State private var servers: [Server] = ServerStorage.shared.loadServers()
     @State private var selectedTab = 0
-    
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    private let cyberAccent = Color(red: 0.0, green: 0.9, blue: 0.7)
+
     private let cyberSecondary = Color(red: 0.0, green: 0.6, blue: 0.5)
-    
+
     var body: some View {
         List(selection: $selectedServer) {
             Section {
                 ForEach(servers) { server in
                     NavigationLink(value: server) {
-                        ServerRow(server: server, accent: cyberAccent)
+                        ServerRow(server: server, accent: Theme.cyberAccent)
                     }
-                    .listRowBackground(cyberBackground)
+                    .listRowBackground(Theme.cyberBackground)
                 }
                 .onDelete(perform: deleteServer)
             } header: {
@@ -170,62 +166,67 @@ struct SidebarView: View {
         }
         .listStyle(.sidebar)
         .scrollContentBackground(.hidden)
-        .background(cyberBackground)
+        .background(Theme.cyberBackground)
         .navigationTitle("TerminalPro")
+        .onChange(of: showingAddServer) { _, newValue in
+            if !newValue {
+                servers = ServerStorage.shared.loadServers()
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingAddServer = true
                 } label: {
                     Image(systemName: "plus")
-                        .foregroundStyle(cyberAccent)
+                        .foregroundStyle(Theme.cyberAccent)
                 }
                 .keyboardShortcut("n", modifiers: .command)
                 .help("New Connection (⌘N)")
             }
-            
+
             ToolbarItem(placement: .secondaryAction) {
                 Button {
                     showingSettings = true
                 } label: {
                     Image(systemName: "gear")
-                        .foregroundStyle(cyberAccent)
+                        .foregroundStyle(Theme.cyberAccent)
                 }
                 .keyboardShortcut(",", modifiers: .command)
                 .help("Settings (⌘,)")
             }
         }
     }
-    
+
     private func deleteServer(at offsets: IndexSet) {
+        let serversToDelete = offsets.map { servers[$0] }
         servers.remove(atOffsets: offsets)
+        serversToDelete.forEach { ServerStorage.shared.deleteServer(id: $0.id) }
     }
 }
 
 struct EmptyDetailView: View {
-    private let cyberBackground = Color(red: 0.05, green: 0.08, blue: 0.12)
-    private let cyberAccent = Color(red: 0.0, green: 0.9, blue: 0.7)
     private let cyberSecondary = Color(red: 0.0, green: 0.6, blue: 0.5)
-    
+
     var body: some View {
         ZStack {
-            cyberBackground.ignoresSafeArea()
-            
+            Theme.cyberBackground.ignoresSafeArea()
+
             VStack(spacing: 20) {
                 Image(systemName: "terminal.fill")
                     .font(.system(size: 60))
                     .foregroundStyle(cyberSecondary)
-                
+
                 Text("Select a Server")
                     .font(.title2)
                     .foregroundStyle(.white)
-                
+
                 Text("Choose a server from the sidebar or create a new connection")
                     .font(.subheadline)
                     .foregroundStyle(.gray)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
-                
+
                 HStack(spacing: 20) {
                     KeyboardShortcutHint(keys: "⌘", description: "New Connection")
                     KeyboardShortcutHint(keys: "⌘,", description: "Settings")
@@ -239,7 +240,7 @@ struct EmptyDetailView: View {
 struct KeyboardShortcutHint: View {
     let keys: String
     let description: String
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(keys)
@@ -251,7 +252,7 @@ struct KeyboardShortcutHint: View {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(Color.gray.opacity(0.3))
                 )
-            
+
             Text(description)
                 .font(.caption2)
                 .foregroundStyle(.gray)
@@ -261,8 +262,8 @@ struct KeyboardShortcutHint: View {
 
 struct AddServerViewWrapper: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var servers: [Server] = []
-    
+    @State private var servers: [Server] = ServerStorage.shared.loadServers()
+
     var body: some View {
         NavigationStack {
             AddServerView(servers: $servers)
@@ -279,7 +280,7 @@ struct AddServerViewWrapper: View {
 
 struct SettingsViewWrapper: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             SettingsView()

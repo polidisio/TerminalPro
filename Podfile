@@ -1,10 +1,17 @@
-platform :ios, '16.0'
+platform :ios, '17.0'
 
 target 'TerminalPro' do
   use_frameworks!
 
-  # SSH/SFTP library - for device builds only
-  # To enable real SSH: uncomment the line below and build for device
-  # pod 'NMSSH', '~> 2.3'
-  
+  # SSH handled via Process-based approach (/usr/bin/ssh) or SPM packages (Citadel)
+  # NMSSH removed - incompatible with simulator builds
+
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+    end
+  end
 end
